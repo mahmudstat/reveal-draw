@@ -1,10 +1,14 @@
 ---
 title: "Drawing Tools"
+subtitle: "Click 🎨 icon on topleft to see it in action"
 format:
   revealjs:
     include-in-header: drawing-tools.html
     slide-number:  c/t
+    output-file: index.html
 ---
+
+
 
 ## Installation
 
