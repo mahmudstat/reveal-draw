@@ -4,7 +4,11 @@ Allows drawing and erasing in a revealjs presentation rendered via quarto
 
 ## Installation
 
-Installation is a cakewalk. Just download the file `drawing-tools.html` and make sure it resides on the same folder as you `qmd` file. Then add the file in `yml` header in the following way:
+## Installation
+
+- Download `drawing-tools.html`
+- Put it in the same directory as your `qmd` slide.
+- Use the following in `yml`
 
 ```
 ---
@@ -17,8 +21,18 @@ format:
 
 ## Usage
 
-Add you contents to `qmd` file and render.
+- Add you contents to `qmd` file and render.
+
+- Click on the draw icon to activate the drawing tools. Click the icon again to hide the tools.
 
 ## Demo
 
 You can see a demo [here](https://docs.statmania.info/slide/02-random-variable.html). You can also downlaod and run the `qmd` file on this repository.
+
+## Customization
+
+You can easily change the icon style and behavior by editing the `drawing-tools.html` file.
+
+## Advanced Usage
+
+If you have many slides residing in the same folder, you can add the tool in your _output.yml and it would apply to all the slides in the directory.

@@ -5,6 +5,7 @@
   width: 100vw; height: 100vh;
   z-index: 1000;
   touch-action: none;
+  pointer-events: none; /* disable drawing initially */
 }
 #controlsWrapper {
   position: fixed;
@@ -58,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const eraserCursor = document.getElementById('eraserCursor');
 
   let drawing = false, erasing = false;
+  let controlsEnabled = false;
   let lastX = 0, lastY = 0;
   const history = [];
 
@@ -81,10 +83,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function start(e) {
+    if (!controlsEnabled) return;
     drawing = true;
     history.push(ctx.getImageData(0,0,canvas.width,canvas.height));
     const p = pos(e); lastX=p.x; lastY=p.y;
-    canvas.style.pointerEvents='auto';
     draw(e);
   }
   function end() {
@@ -131,11 +133,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   toggleControls.onclick = () => {
-    const v = controls.style.display==='flex';
-    controls.style.display=v?'none':'flex';
-    canvas.style.pointerEvents=v?'none':'auto';
-    if (erasing&&!v) eraserCursor.style.display='block';
-    else eraserCursor.style.display='none';
+    const isVisible = controls.style.display === 'flex';
+    controls.style.display = isVisible ? 'none' : 'flex';
+    controlsEnabled = !isVisible;
+    canvas.style.pointerEvents = controlsEnabled ? 'auto' : 'none';
+    if (erasing && controlsEnabled) eraserCursor.style.display = 'block';
+    else eraserCursor.style.display = 'none';
   };
 
   canvas.addEventListener('pointerdown', function(e) {

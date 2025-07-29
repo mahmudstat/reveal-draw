@@ -8,8 +8,8 @@ format:
 
 ## Installation
 
-- Download `drawing-tools.html`
-- Put in the same directory as your `qmd` slide.
+- Download [`drawing-tools.html`](https://github.com/mahmudstat/reveal-draw/blob/main/drawing-tools.html)
+- Put it in the same directory as your `qmd` slide.
 - Use the following in `yml`
 
 
@@ -19,8 +19,27 @@ title: "Drawing Tools"
 format:
   revealjs:
     include-in-header: drawing-tools.html
+    output-file: index.html
 ---
 ```
 
+## Usage
 
+- Add you contents to `qmd` file and render.
+
+- Click on the draw icon to activate the drawing tools. Click the icon again to hide the tools.
+
+## Demo
+
+You can see a matured [demo here](https://docs.statmania.info/slide/02-random-variable.html). You can also downlaod and run the [`qmd`](https://github.com/mahmudstat/reveal-draw/blob/main/sample.qmd) file on this repository.
+
+## Customization
+
+You can easily change the icon style and behavior by editing the `drawing-tools.html` file.
+
+## Advanced Usage
+
+If you have many slides residing in the same folder, you can add the tool in your `_output.yml` and it would apply to all the slides in the directory. I have implemented [this idea here](https://github.com/mahmudstat/stat-lectures/tree/main/slide).
+
+## Have Fun Drawing!
 

@@ -391,6 +391,7 @@
     width: 100vw; height: 100vh;
     z-index: 1000;
     touch-action: none;
+    pointer-events: none; /* disable drawing initially */
   }
   #controlsWrapper {
     position: fixed;
@@ -444,6 +445,7 @@
     const eraserCursor = document.getElementById('eraserCursor');
 
     let drawing = false, erasing = false;
+    let controlsEnabled = false;
     let lastX = 0, lastY = 0;
     const history = [];
 
@@ -467,10 +469,10 @@
     }
 
     function start(e) {
+      if (!controlsEnabled) return;
       drawing = true;
       history.push(ctx.getImageData(0,0,canvas.width,canvas.height));
       const p = pos(e); lastX=p.x; lastY=p.y;
-      canvas.style.pointerEvents='auto';
       draw(e);
     }
     function end() {
@@ -517,11 +519,12 @@
     });
 
     toggleControls.onclick = () => {
-      const v = controls.style.display==='flex';
-      controls.style.display=v?'none':'flex';
-      canvas.style.pointerEvents=v?'none':'auto';
-      if (erasing&&!v) eraserCursor.style.display='block';
-      else eraserCursor.style.display='none';
+      const isVisible = controls.style.display === 'flex';
+      controls.style.display = isVisible ? 'none' : 'flex';
+      controlsEnabled = !isVisible;
+      canvas.style.pointerEvents = controlsEnabled ? 'auto' : 'none';
+      if (erasing && controlsEnabled) eraserCursor.style.display = 'block';
+      else eraserCursor.style.display = 'none';
     };
 
     canvas.addEventListener('pointerdown', function(e) {
@@ -547,8 +550,8 @@
 <section id="installation" class="slide level2">
 <h2>Installation</h2>
 <ul>
-<li>Download <code>drawing-tools.html</code></li>
-<li>Put in the same directory as your <code>qmd</code> slide.</li>
+<li>Download <a href="https://github.com/mahmudstat/reveal-draw/blob/main/drawing-tools.html"><code>drawing-tools.html</code></a></li>
+<li>Put it in the same directory as your <code>qmd</code> slide.</li>
 <li>Use the following in <code>yml</code></li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource yml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href=""></a><span class="pp">---</span></span>
@@ -556,7 +559,30 @@
 <span id="cb1-3"><a href=""></a><span class="fu">format</span><span class="kw">:</span></span>
 <span id="cb1-4"><a href=""></a><span class="at">  </span><span class="fu">revealjs</span><span class="kw">:</span></span>
 <span id="cb1-5"><a href=""></a><span class="at">    </span><span class="fu">include-in-header</span><span class="kw">:</span><span class="at"> drawing-tools.html</span></span>
-<span id="cb1-6"><a href=""></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href=""></a><span class="at">    </span><span class="fu">output-file</span><span class="kw">:</span><span class="at"> index.html</span></span>
+<span id="cb1-7"><a href=""></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="usage" class="slide level2">
+<h2>Usage</h2>
+<ul>
+<li><p>Add you contents to <code>qmd</code> file and render.</p></li>
+<li><p>Click on the draw icon to activate the drawing tools. Click the icon again to hide the tools.</p></li>
+</ul>
+</section>
+<section id="demo" class="slide level2">
+<h2>Demo</h2>
+<p>You can see a matured <a href="https://docs.statmania.info/slide/02-random-variable.html">demo here</a>. You can also downlaod and run the <a href="https://github.com/mahmudstat/reveal-draw/blob/main/sample.qmd"><code>qmd</code></a> file on this repository.</p>
+</section>
+<section id="customization" class="slide level2">
+<h2>Customization</h2>
+<p>You can easily change the icon style and behavior by editing the <code>drawing-tools.html</code> file.</p>
+</section>
+<section id="advanced-usage" class="slide level2">
+<h2>Advanced Usage</h2>
+<p>If you have many slides residing in the same folder, you can add the tool in your <code>_output.yml</code> and it would apply to all the slides in the directory. I have implemented <a href="https://github.com/mahmudstat/stat-lectures/tree/main/slide">this idea here</a>.</p>
+</section>
+<section id="have-fun-drawing" class="slide level2">
+<h2>Have Fun Drawing!</h2>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
