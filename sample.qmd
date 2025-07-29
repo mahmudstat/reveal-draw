@@ -6,6 +6,7 @@ format:
     include-in-header: drawing-tools.html
     slide-number:  c/t
     output-file: index.html
+    footer: "By <a href='https://www.thinkermahmud.com/' target='_blank'><b>Abdullah Al Mahmud</b></a>"
 ---
 
 
@@ -31,7 +32,7 @@ format:
 
 - Add you contents to `qmd` file and render.
 
-- Click on the draw icon to activate the drawing tools. Click the icon again to hide the tools.
+- Click on the draw icon 🎨 to activate the drawing tools. Click the icon again to hide the tools.
 
 ## Demo
 
