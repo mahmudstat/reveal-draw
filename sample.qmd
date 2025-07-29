@@ -1,0 +1,26 @@
+---
+title: "Drawing Tools"
+format:
+  revealjs:
+    include-in-header: drawing-tools.html
+    slide-number:  c/t
+---
+
+## Installation
+
+- Download `drawing-tools.html`
+- Put in the same directory as your `qmd` slide.
+- Use the following in `yml`
+
+
+```{.yml code-line-numbers="true"}
+---
+title: "Drawing Tools"
+format:
+  revealjs:
+    include-in-header: drawing-tools.html
+---
+```
+
+
+

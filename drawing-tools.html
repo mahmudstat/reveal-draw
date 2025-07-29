@@ -1,0 +1,148 @@
+<style>
+#drawingCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 1000;
+  touch-action: none;
+}
+#controlsWrapper {
+  position: fixed;
+  top: 10px; left: 10px;
+  z-index: 1001;
+}
+#controls {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  background: #b3b3ff;
+  padding: 5px;
+  border-radius: 10px;
+  gap: 5px;
+}
+#controls input, #controls button {
+  width: 40px; height: 40px;
+}
+#toggleControls {
+  background: none; border: none; width: 40px; height: 40px; font-size: 20px;
+}
+#eraserCursor {
+  position: fixed; pointer-events: none;
+  border: 1px solid red; border-radius: 50%;
+  display: none; z-index: 1002;
+}
+</style>
+
+<div id="controlsWrapper">
+  <button id="toggleControls">🎨</button>
+  <div id="controls">
+    <button id="penTool">🖉</button>
+    <input type="color" id="penColor" value="#339966" />
+    <input type="range" id="penSize" min="1" max="20" value="4" />
+
+    <button id="eraserTool">🩹</button>
+    <input type="range" id="eraserSize" min="20" max="250" value="60" />
+
+    <button id="undo">↩️</button>
+    <button id="clear" type="button">🗑️</button>
+  </div>
+</div>
+
+<div id="eraserCursor"></div>
+<canvas id="drawingCanvas"></canvas>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById('drawingCanvas');
+  const ctx = canvas.getContext('2d');
+  const eraserCursor = document.getElementById('eraserCursor');
+
+  let drawing = false, erasing = false;
+  let lastX = 0, lastY = 0;
+  const history = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function pos(e) {
+    if (e.touches) e = e.touches[0];
+    return { x: e.clientX, y: e.clientY };
+  }
+  function updateEraser(x,y) {
+    const size = Number(eraserSize.value);
+    eraserCursor.style.width = size+'px';
+    eraserCursor.style.height = size+'px';
+    eraserCursor.style.left = x-size/2+'px';
+    eraserCursor.style.top = y-size/2+'px';
+  }
+
+  function start(e) {
+    drawing = true;
+    history.push(ctx.getImageData(0,0,canvas.width,canvas.height));
+    const p = pos(e); lastX=p.x; lastY=p.y;
+    canvas.style.pointerEvents='auto';
+    draw(e);
+  }
+  function end() {
+    drawing = false;
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  function draw(e) {
+    if (!drawing) return;
+    const p = pos(e);
+    const size = erasing ? Number(eraserSize.value) : Number(penSize.value);
+    ctx.lineWidth = size;
+    ctx.lineCap = 'round';
+    ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = penColor.value;
+    if (erasing) updateEraser(p.x,p.y);
+    ctx.beginPath();
+    ctx.moveTo(lastX,lastY);
+    ctx.lineTo(p.x,p.y);
+    ctx.stroke();
+    lastX=p.x; lastY=p.y;
+  }
+
+  canvas.addEventListener('pointerdown', start);
+  canvas.addEventListener('pointermove', draw);
+  canvas.addEventListener('pointerup', end);
+  canvas.addEventListener('pointercancel', end);
+
+  penTool.onclick = () => {
+    erasing = false;
+    eraserCursor.style.display='none';
+    canvas.style.pointerEvents = 'auto';
+  };
+  eraserTool.onclick = () => {
+    erasing = true;
+    eraserCursor.style.display='block';
+    canvas.style.pointerEvents = 'auto';
+  };
+  undo.onclick = () => {
+    if (history.length) ctx.putImageData(history.pop(),0,0);
+  };
+  document.getElementById('clear').addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    history.length = 0;
+  });
+
+  toggleControls.onclick = () => {
+    const v = controls.style.display==='flex';
+    controls.style.display=v?'none':'flex';
+    canvas.style.pointerEvents=v?'none':'auto';
+    if (erasing&&!v) eraserCursor.style.display='block';
+    else eraserCursor.style.display='none';
+  };
+
+  canvas.addEventListener('pointerdown', function(e) {
+    this.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointerup', function(e) {
+    this.releasePointerCapture(e.pointerId);
+  });
+});
+</script>
