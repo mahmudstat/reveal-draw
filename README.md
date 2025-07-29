@@ -4,8 +4,8 @@ Allows drawing and erasing in a revealjs presentation rendered via quarto
 
 ## Installation
 
-- Download `drawing-tools.html`
-- Put it in the same directory as your `qmd` slide.
+- Download the [latest release](https://github.com/mahmudstat/reveal-draw/releases/) or simply `drawing-tools.html`
+- Put `drawing-tools.html` in the same directory as your `qmd` slide (if you just dowloade the `html`)
 - Use the following in `yml`
 
 ```
